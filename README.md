@@ -10,6 +10,16 @@ The package ships **two cards**:
 
 A single card type serves **any** Stellantis vehicle — just point it at that car's entities. Works for hybrids and pure EVs (`hide_fuel`).
 
+## Screenshots
+
+### Full card
+
+![Full cards — C5 Aircross (hybrid) and Peugeot 3008e (EV)](images/full-cards.png)
+
+### Compact card
+
+![Compact cards side by side](images/compact-cards.png)
+
 ## Installation
 
 ### HACS (recommended)
@@ -73,10 +83,14 @@ entities:
 type: custom:stellantis-vehicle-compact-card
 title: Peugeot 3008e
 hide_fuel: true
+pills_icons_only: true
+save_label: vs petrol
+fuel_baseline: 11.7
 image: /local/stellantis_vehicles/<account>/<VIN>.png
 entities:
   battery: sensor.garage_peugeot_3008e_battery
   electricRange: sensor.garage_peugeot_3008e_range
+  mileage: sensor.garage_peugeot_3008e_mileage
   charging: binary_sensor.garage_peugeot_3008e_battery_charging
   chargingRate: sensor.garage_peugeot_3008e_battery_charging_rate
   chargingEnd: sensor.garage_peugeot_3008e_battery_charging_end
@@ -102,8 +116,8 @@ entities:
 | `image` | string | C5 default | Vehicle image URL (the integration stores one under `/local/stellantis_vehicles/...`). |
 | `hide_fuel` | boolean | `false` | Hide the fuel gauge/metric for pure EVs and rebalance the layout. |
 | `fuel_baseline` | number | `12.16` | €/100km reference used for the "saved vs fuel" figure in the cost band (full card). |
-| `save_label` | string | `saved vs diesel` | Label under the savings value (full card). |
-| `compact_icons_direction` | `vertical` \| `horizontal` | `vertical` | Compact card badge layout. |
+| `save_label` | string | `saved vs diesel` (full) / `vs diesel` (compact) | Label next to the savings value. |
+| `pills_icons_only` | boolean | `false` | Compact card: collapse the status pills to circular icon-only badges (state text stays on hover). |
 | `entities` | map | C5 defaults | Entity overrides (see examples above). |
 
 ### `entities` keys

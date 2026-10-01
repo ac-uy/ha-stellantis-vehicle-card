@@ -30,7 +30,7 @@ const DEFAULT_ENTITIES = {
   image: '/local/stellantis_vehicles/AC-ACNT200005973156/VR7A4DGZSPL028911.png',
 };
 
-const DIESEL_BASE = 6.4 * 1.90; // C5 diesel Aircross baseline â‚¬/100km
+const DIESEL_BASE = 6.4 * 1.90; // C5 diesel Aircross baseline €/100km
 
 const CSS = `
   :host { display:block; }
@@ -177,16 +177,16 @@ class C5AircrossCard extends HTMLElement {
   _state(entity) { return entity ? this._hass?.states?.[entity] : undefined; }
   _raw(entity) { const value = this._state(entity)?.state; return value === undefined || value === 'unknown' || value === 'unavailable' ? null : value; }
   _number(entity) { const value = Number(this._raw(entity)); return Number.isFinite(value) ? value : null; }
-  _format(entity, digits = 1) { const value = this._number(entity); if (value === null) return 'â€”'; return value.toLocaleString('en-US', { maximumFractionDigits: digits }); }
+  _format(entity, digits = 1) { const value = this._number(entity); if (value === null) return '—'; return value.toLocaleString('en-US', { maximumFractionDigits: digits }); }
   _binary(entity, onText, offText) { const value = this._raw(entity); if (value === null) return 'Unknown'; return value === 'on' ? onText : offText; }
   _escape(value) { return String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char])); }
   _icon(name, cls = '') { return `<ha-icon class="${cls}" icon="${this._escape(name)}"></ha-icon>`; }
 
   _relativeTime(entity) {
     const raw = this._raw(entity);
-    if (!raw) return 'â€”';
+    if (!raw) return '—';
     const then = new Date(raw);
-    if (Number.isNaN(then.getTime())) return 'â€”';
+    if (Number.isNaN(then.getTime())) return '—';
     const diff = Date.now() - then.getTime();
     const mins = Math.round(diff / 60000);
     if (mins < 1) return 'just now';
@@ -226,7 +226,7 @@ class C5AircrossCard extends HTMLElement {
     if (n === null) {
       return `<div class="cost-band empty">
         <div class="cb-icon">${this._icon('mdi:cash')}</div>
-        <div class="cb-main"><div class="cb-cost">â€”</div><div class="cb-label">Charging cost Â· gathering data</div></div>
+        <div class="cb-main"><div class="cb-cost">—</div><div class="cb-label">Charging cost · gathering data</div></div>
       </div>`;
     }
     const baseline = Number(this._config.fuel_baseline) || DIESEL_BASE;
@@ -235,11 +235,11 @@ class C5AircrossCard extends HTMLElement {
     return `<div class="cost-band">
       <div class="cb-icon">${this._icon('mdi:cash')}</div>
       <div class="cb-main">
-        <div class="cb-cost">â‚¬${n.toLocaleString('en-US', { maximumFractionDigits: 2 })}<small> /100km</small></div>
+        <div class="cb-cost">€${n.toLocaleString('en-US', { maximumFractionDigits: 2 })}<small> /100km</small></div>
         <div class="cb-label">Cost to charge &amp; drive</div>
       </div>
       <div class="cb-save">
-        <div class="cb-save-val">â‚¬${save.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+        <div class="cb-save-val">€${save.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
         <div class="cb-save-label">${this._escape(saveLabel)}</div>
       </div>
     </div>`;
@@ -248,7 +248,7 @@ class C5AircrossCard extends HTMLElement {
   _chargeStrip() {
     const e = this._entities;
     const rate = this._number(e.chargingRate);
-    const rateTxt = rate === null ? 'â€”' : `${rate.toLocaleString('en-US', { maximumFractionDigits: 0 })} km/h`;
+    const rateTxt = rate === null ? '—' : `${rate.toLocaleString('en-US', { maximumFractionDigits: 0 })} km/h`;
     const limit = this._number(e.chargeLimit);
     const items = [];
     items.push(`<span class="cs-item"><ha-icon class="cs-bolt" icon="mdi:lightning-bolt"></ha-icon>${this._escape(rateTxt)}</span>`);
@@ -264,7 +264,7 @@ class C5AircrossCard extends HTMLElement {
           const h = Math.floor(diffMin / 60);
           const m = diffMin % 60;
           const inTxt = h > 0 ? `${h}h ${m}m` : `${m}m`;
-          etaTxt = `Ready ${timeStr} <span class="cs-sub">Â· in ${inTxt}</span>`;
+          etaTxt = `Ready ${timeStr} <span class="cs-sub">· in ${inTxt}</span>`;
         }
         items.push(`<span class="cs-item"><ha-icon icon="mdi:clock-outline"></ha-icon>${etaTxt}</span>`);
       }
@@ -291,8 +291,8 @@ class C5AircrossCard extends HTMLElement {
     const climateAvailable = this._state(climateOn ? e.climateStop : e.climateStart)
       && this._state(climateOn ? e.climateStop : e.climateStart).state !== 'unavailable';
 
-    const eyebrow = this._config.eyebrow || 'MY CITROÃ‹N';
-    const subtitle = this._config.subtitle || 'Hybrid Â· Garage Â· Connected vehicle';
+    const eyebrow = this._config.eyebrow || 'MY CITROËN';
+    const subtitle = this._config.subtitle || 'Hybrid · Garage · Connected vehicle';
     const hideFuel = this._config.hide_fuel === true;
 
     this.shadowRoot.innerHTML = `<style>${CSS}</style><ha-card class="${accent}"><div class="shell">
@@ -316,8 +316,8 @@ class C5AircrossCard extends HTMLElement {
         ${this._stat('Last trip', this._format(e.lastTrip, 1), 'km')}
         ${this._stat('Last charge', this._relativeTime(e.lastCharge))}
         ${this._stat('Battery health', this._format(e.batteryHealth, 0), '%')}
-        ${this._stat('Cabin', this._format(e.cabin, 1), 'Â°C')}
-        ${this._stat('Coolant', this._format(e.coolant, 1), 'Â°C')}
+        ${this._stat('Cabin', this._format(e.cabin, 1), '°C')}
+        ${this._stat('Coolant', this._format(e.coolant, 1), '°C')}
         ${this._stat('12V battery', this._format(e.serviceBattery, 0), '%')}
         ${this._stat('Engine', this._binary(e.engine, 'Running', 'Off'))}
       </div>
@@ -364,7 +364,7 @@ class C5AircrossCard extends HTMLElement {
 if (!customElements.get(CARD_NAME)) customElements.define(CARD_NAME, C5AircrossCard);
 window.customCards = window.customCards || [];
 if (!window.customCards.some((card) => card.type === CARD_NAME)) {
-  window.customCards.push({ type: CARD_NAME, name: 'Stellantis Vehicle Card', description: 'Vehicle dashboard card for Stellantis cars (CitroÃ«n / Peugeot / etc.)' });
+  window.customCards.push({ type: CARD_NAME, name: 'Stellantis Vehicle Card', description: 'Vehicle dashboard card for Stellantis cars (Citroën / Peugeot / etc.)' });
 }
 
 })();
@@ -377,6 +377,7 @@ const DEFAULT_ENTITIES = {
   electricRange: 'sensor.garage_c5_aircross_range',
   fuel: 'sensor.garage_c5_aircross_fuel',
   fuelRange: 'sensor.garage_c5_aircross_fuel_range',
+  mileage: 'sensor.garage_c5_aircross_mileage',
   charging: 'binary_sensor.garage_c5_aircross_battery_charging',
   chargingRate: 'sensor.garage_c5_aircross_battery_charging_rate',
   chargingEnd: 'sensor.garage_c5_aircross_battery_charging_end',
@@ -405,10 +406,10 @@ const CSS = `
   ha-card.accent-low::before { background:linear-gradient(90deg,transparent,#f59e0b,transparent); }
   ha-card.accent-alarm::before { background:linear-gradient(90deg,transparent,#ef4444,transparent); }
   .wrap { position:relative; padding:18px; }
-  .head { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; }
-  .title { font-size:18px; font-weight:800; letter-spacing:-.02em; justify-self:start; }
-  .head .conn { justify-self:end; }
-  .cost { display:flex; flex-direction:column; align-items:center; gap:2px; justify-self:center; padding:6px 14px; border-radius:16px; background:rgba(15,23,42,.6); border:1px solid rgba(148,163,184,.16); white-space:nowrap; }
+  .head { display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; }
+  .head-l { justify-self:start; display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .title { font-size:18px; font-weight:800; letter-spacing:-.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cost { display:flex; flex-direction:column; align-items:flex-end; gap:2px; justify-self:end; padding:6px 14px; border-radius:16px; background:rgba(15,23,42,.6); border:1px solid rgba(148,163,184,.16); white-space:nowrap; }
   .cost .cost-line { display:flex; align-items:center; gap:6px; }
   .cost ha-icon { --mdc-icon-size:16px; color:#4ade80; }
   .cost .cost-val { font-size:14px; font-weight:800; letter-spacing:-.02em; color:#f8fafc; }
@@ -420,7 +421,7 @@ const CSS = `
   .dot { width:8px; height:8px; border-radius:50%; background:#64748b; }
   .dot.on { background:#22c55e; box-shadow:0 0 0 4px rgba(34,197,94,.16); }
   .stage { position:relative; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; margin-top:6px; }
-  .stage.stage-ev { grid-template-columns:1fr 1.3fr; }
+  .stage.stage-ev { grid-template-columns:1fr auto; }
   .metric { display:flex; flex-direction:column; gap:7px; }
   .metric.right { align-items:flex-end; }
   .m { min-width:0; width:100%; max-width:150px; padding:9px 11px; border:1px solid rgba(148,163,184,.16); border-radius:14px; background:rgba(15,23,42,.55); }
@@ -442,12 +443,15 @@ const CSS = `
   .charge-strip .cs-bolt { animation:blink 1.4s ease infinite; }
   @keyframes blink { 50% { opacity:.35; } }
   .charge-strip .cs-sub { color:#86efac; opacity:.8; font-weight:600; }
-  .car { position:relative; display:flex; align-items:center; justify-content:center; padding:0 4px; }
+  .car { position:relative; display:flex; align-items:center; justify-content:center; padding:0 4px; height:130px; }
   .car::after { content:''; position:absolute; left:8%; right:8%; bottom:12px; height:14px; border-radius:50%; background:rgba(0,0,0,.42); filter:blur(12px); }
-  .car img { position:relative; z-index:1; width:100%; max-width:230px; max-height:150px; object-fit:contain; filter:drop-shadow(0 16px 14px rgba(0,0,0,.5)); }
-  .status { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-top:14px; }
-  .pill { display:flex; align-items:center; gap:6px; padding:7px 11px; border:1px solid rgba(148,163,184,.16); border-radius:999px; background:rgba(15,23,42,.55); font-size:11px; font-weight:700; color:#cbd5e1; font-family:inherit; }
-  .pill ha-icon { --mdc-icon-size:16px; color:#94a3b8; }
+  .car img { position:relative; z-index:1; width:100%; max-width:230px; height:100%; max-height:130px; object-fit:contain; filter:drop-shadow(0 16px 14px rgba(0,0,0,.5)); }
+  .status { display:flex; justify-content:center; flex-wrap:wrap; gap:6px; margin-top:14px; }
+  .pill { display:flex; align-items:center; gap:5px; padding:7px 9px; border:1px solid rgba(148,163,184,.16); border-radius:999px; background:rgba(15,23,42,.55); font-size:11px; font-weight:700; color:#cbd5e1; font-family:inherit; white-space:nowrap; }
+  .pill ha-icon { --mdc-icon-size:15px; color:#94a3b8; flex:0 0 auto; }
+  .pill span { overflow:hidden; text-overflow:ellipsis; }
+  .pill.icon-only { padding:8px; border-radius:50%; }
+  .pill.icon-only ha-icon { --mdc-icon-size:18px; }
   .pill.on ha-icon { color:#22c55e; }
   .pill.warn ha-icon { color:#ef4444; }
   button.pill { cursor:pointer; transition:transform .15s ease, background .15s ease, border-color .15s ease; }
@@ -458,8 +462,10 @@ const CSS = `
   button.pill.act { border-color:rgba(148,163,184,.35); }
   button.pill.busy { animation:pulse 1s ease infinite; }
   @keyframes pulse { 50% { opacity:.5; } }
+  .odo { display:flex; align-items:center; gap:4px; color:#94a3b8; font-size:11px; font-weight:600; }
+  .odo ha-icon { --mdc-icon-size:13px; color:#94a3b8; }
   @media (max-width:520px) {
-    .stage { grid-template-columns:1fr; }
+    .stage, .stage.stage-ev { grid-template-columns:1fr; }
     .metric, .metric.right { align-items:stretch; }
     .metric.right .m { text-align:left; }
     .metric.right .m-top { flex-direction:row; }
@@ -486,7 +492,7 @@ class C5AircrossCompactCard extends HTMLElement {
   _state(e) { return e ? this._hass?.states?.[e] : undefined; }
   _raw(e) { const v = this._state(e)?.state; return v === undefined || v === 'unknown' || v === 'unavailable' ? null : v; }
   _num(e) { const n = Number(this._raw(e)); return Number.isFinite(n) ? n : null; }
-  _fmt(e, d = 0) { const n = this._num(e); return n === null ? 'â€”' : n.toLocaleString('en-US', { maximumFractionDigits: d }); }
+  _fmt(e, d = 0) { const n = this._num(e); return n === null ? '—' : n.toLocaleString('en-US', { maximumFractionDigits: d }); }
   _esc(v) { return String(v).replace(/[&<>'"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c])); }
   _icon(n) { return `<ha-icon icon="${this._esc(n)}"></ha-icon>`; }
 
@@ -496,14 +502,16 @@ class C5AircrossCompactCard extends HTMLElement {
     const isOn = raw === 'on';
     const txt = raw === null ? label : (isOn ? onText : offText);
     const cls = raw === null ? '' : (isOn ? (warn ? 'warn' : 'on') : '');
-    return `<span class="pill ${cls}">${this._icon(icon)}<span>${this._esc(txt)}</span></span>`;
+    const iconsOnly = this._config.pills_icons_only === true;
+    const inner = iconsOnly ? this._icon(icon) : `${this._icon(icon)}<span>${this._esc(txt)}</span>`;
+    return `<span class="pill ${cls}${iconsOnly ? ' icon-only' : ''}" title="${this._esc(txt)}">${inner}</span>`;
   }
 
   // Live charging strip (rate + ready-by time + target)
   _chargeStrip() {
     const e = this._entities;
     const rate = this._num(e.chargingRate);
-    const rateTxt = rate === null ? 'â€”' : `${rate.toLocaleString('en-US', { maximumFractionDigits: 0 })} km/h`;
+    const rateTxt = rate === null ? '—' : `${rate.toLocaleString('en-US', { maximumFractionDigits: 0 })} km/h`;
     const limit = this._num(e.chargeLimit);
     const items = [];
     items.push(`<span class="cs-item"><ha-icon class="cs-bolt" icon="mdi:lightning-bolt"></ha-icon>${this._esc(rateTxt)}</span>`);
@@ -519,7 +527,7 @@ class C5AircrossCompactCard extends HTMLElement {
           const h = Math.floor(diffMin / 60);
           const m = diffMin % 60;
           const inTxt = h > 0 ? `${h}h ${m}m` : `${m}m`;
-          etaTxt = `Ready ${timeStr} <span class="cs-sub">Â· in ${inTxt}</span>`;
+          etaTxt = `Ready ${timeStr} <span class="cs-sub">· in ${inTxt}</span>`;
         }
         items.push(`<span class="cs-item"><ha-icon icon="mdi:clock-outline"></ha-icon>${etaTxt}</span>`);
       }
@@ -534,19 +542,22 @@ class C5AircrossCompactCard extends HTMLElement {
   _costBadge(entity) {
     const n = this._num(entity);
     if (n === null || n <= 0) {
-      return `<span class="cost cost-empty">${this._icon('mdi:cash')}<span class="cost-unit">â‚¬/100km Â· no data yet</span></span>`;
+      return `<span class="cost cost-empty">${this._icon('mdi:cash')}<span class="cost-unit">€/100km · no data yet</span></span>`;
     }
-    const val = `â‚¬${n.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
-    const diesel = 6.4 * 1.90;
-    const save = Math.max(0, diesel - n);
-    const saveTxt = `saves â‚¬${save.toLocaleString('en-US', { maximumFractionDigits: 2 })} vs diesel`;
+    const val = `€${n.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+    const baseline = Number(this._config.fuel_baseline) || (6.4 * 1.90);
+    const saveLabel = this._config.save_label || 'vs diesel';
+    const save = Math.max(0, baseline - n);
+    const saveTxt = `saves €${save.toLocaleString('en-US', { maximumFractionDigits: 2 })} ${saveLabel}`;
     return `<span class="cost"><span class="cost-line">${this._icon('mdi:cash')}<span class="cost-val">${this._esc(val)}</span><span class="cost-unit">/100km</span></span><span class="cost-save">${this._esc(saveTxt)}</span></span>`;
   }
 
   // Clickable action pill (<button>)
   _actionPill(action, icon, label, { on = false, disabled = false, warn = false } = {}) {
-    const cls = ['pill', 'act', on ? (warn ? 'warn' : 'on') : ''].filter(Boolean).join(' ');
-    return `<button class="${cls}" data-action="${this._esc(action)}" ${disabled ? 'disabled' : ''}>${this._icon(icon)}<span>${this._esc(label)}</span></button>`;
+    const iconsOnly = this._config.pills_icons_only === true;
+    const cls = ['pill', 'act', on ? (warn ? 'warn' : 'on') : '', iconsOnly ? 'icon-only' : ''].filter(Boolean).join(' ');
+    const inner = iconsOnly ? this._icon(icon) : `${this._icon(icon)}<span>${this._esc(label)}</span>`;
+    return `<button class="${cls}" data-action="${this._esc(action)}" ${disabled ? 'disabled' : ''} title="${this._esc(label)}">${inner}</button>`;
   }
 
   _render() {
@@ -568,7 +579,7 @@ class C5AircrossCompactCard extends HTMLElement {
     const accent = charging ? 'accent-charging' : (alarmOn ? 'accent-alarm' : (lowBattery ? 'accent-low' : ''));
 
     this.shadowRoot.innerHTML = `<style>${CSS}</style><ha-card class="${accent}"><div class="wrap">
-      <div class="head"><span class="title">${this._esc(title)}</span>${this._costBadge(e.costPer100km)}<span class="conn"><span class="dot ${connected ? 'on' : ''}"></span>${connected ? 'CONNECTED' : 'OFFLINE'}</span></div>
+      <div class="head"><div class="head-l"><span class="title">${this._esc(title)}</span>${this._num(e.mileage) !== null ? `<span class="odo">${this._icon('mdi:counter')}${this._fmt(e.mileage)} km</span>` : ''}</div>${this._costBadge(e.costPer100km)}</div>
       <div class="stage${hideFuel ? ' stage-ev' : ''}">
         <div class="metric">
           <div class="m"><div class="m-top">${this._icon(charging ? 'mdi:battery-charging' : 'mdi:battery-high')}Battery</div><div class="m-val">${this._fmt(e.battery)}%</div><div class="m-sub">${this._fmt(e.electricRange)} km range</div><div class="bar"><div class="fill battery ${charging ? 'charging' : ''}" style="width:${batt}%"></div></div></div>
@@ -580,11 +591,11 @@ class C5AircrossCompactCard extends HTMLElement {
       </div>
       ${charging ? this._chargeStrip() : ''}
       <div class="status">
-        ${this._actionPill('climate', climateOn ? 'mdi:air-conditioner' : 'mdi:snowflake', climateOn ? 'Climate on' : 'Climate off', { on: climateOn, disabled: climateDisabled })}
-        ${this._pill('Charging', e.charging, 'mdi:battery-charging', 'Charging', 'Not charging')}
-        ${this._pill('Plugged', e.plugged, 'mdi:power-plug', 'Plugged in', 'Unplugged')}
-        ${this._pill('Engine', e.engine, 'mdi:engine', 'Running', 'Off')}
-        ${this._pill('Alarm', e.alarm, 'mdi:alarm-light', 'Alarm active', 'Secure', true)}
+        ${this._actionPill('climate', climateOn ? 'mdi:air-conditioner' : 'mdi:snowflake', climateOn ? 'Climate' : 'Climate', { on: climateOn, disabled: climateDisabled })}
+        ${this._pill('Charging', e.charging, 'mdi:battery-charging', 'Charging', 'Idle')}
+        ${this._pill('Plugged', e.plugged, 'mdi:power-plug', 'Plugged', 'Unplugged')}
+        ${this._pill('Engine', e.engine, 'mdi:engine', 'On', 'Off')}
+        ${this._pill('Alarm', e.alarm, 'mdi:alarm-light', 'Alarm', 'Secure', true)}
       </div>
     </div></ha-card>`;
   }
