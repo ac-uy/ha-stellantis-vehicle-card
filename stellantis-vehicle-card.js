@@ -269,9 +269,8 @@ class C5AircrossCard extends HTMLElement {
         items.push(`<span class="cs-item"><ha-icon icon="mdi:clock-outline"></ha-icon>${etaTxt}</span>`);
       }
     }
-    if (limit !== null) {
-      items.push(`<span class="cs-item"><ha-icon icon="mdi:battery-charging-90"></ha-icon>to ${this._escape(limit.toLocaleString('en-US', { maximumFractionDigits: 0 }))}%</span>`);
-    }
+    const limitPct = (limit !== null && limit > 0) ? limit : 100;
+    items.push(`<span class="cs-item"><ha-icon icon="mdi:battery-charging-90"></ha-icon>to ${this._escape(limitPct.toLocaleString('en-US', { maximumFractionDigits: 0 }))}%</span>`);
     return `<div class="charge-strip">${items.join('')}</div>`;
   }
 
@@ -532,9 +531,8 @@ class C5AircrossCompactCard extends HTMLElement {
         items.push(`<span class="cs-item"><ha-icon icon="mdi:clock-outline"></ha-icon>${etaTxt}</span>`);
       }
     }
-    if (limit !== null) {
-      items.push(`<span class="cs-item"><ha-icon icon="mdi:battery-charging-90"></ha-icon>to ${this._esc(limit.toLocaleString('en-US', { maximumFractionDigits: 0 }))}%</span>`);
-    }
+    const limitPct = (limit !== null && limit > 0) ? limit : 100;
+    items.push(`<span class="cs-item"><ha-icon icon="mdi:battery-charging-90"></ha-icon>to ${this._esc(limitPct.toLocaleString('en-US', { maximumFractionDigits: 0 }))}%</span>`);
     return `<div class="charge-strip">${items.join('')}</div>`;
   }
 
