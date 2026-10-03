@@ -5,8 +5,8 @@ Custom Home Assistant Lovelace cards for Stellantis vehicles (Citroën, Peugeot,
 
 The package ships **two cards**:
 
-- **`stellantis-vehicle-card`** — a full dashboard card: a hero layout with the vehicle image flanked by battery (and fuel) gauges, a live charging animation, a charging strip (rate · ready-by · target), a cost-per-100km highlight band with savings vs fuel, status chips, vehicle-detail stats, and climate / wake remote controls.
-- **`stellantis-vehicle-compact-card`** — a compact status card centered on the vehicle image, with the cost badge in the header, battery/fuel metrics, the charging strip, status pills, a state-based accent glow (green charging / amber low battery / red alarm), and a configurable icon-badge direction.
+- **`stellantis-custom-vehicle-card`** — a full dashboard card: a hero layout with the vehicle image flanked by battery (and fuel) gauges, a live charging animation, a charging strip (rate · ready-by · target), a cost-per-100km highlight band with savings vs fuel, status chips, vehicle-detail stats, and climate / wake remote controls.
+- **`stellantis-custom-vehicle-compact-card`** — a compact status card centered on the vehicle image, with the cost badge in the header, battery/fuel metrics, the charging strip, status pills, a state-based accent glow (green charging / amber low battery / red alarm), and a configurable icon-badge direction.
 
 A single card type serves **any** Stellantis vehicle — just point it at that car's entities. Works for hybrids and pure EVs (`hide_fuel`).
 
@@ -45,7 +45,7 @@ Both cards read sensible defaults, but you should pass your vehicle's `entities`
 ### Full card
 
 ```yaml
-type: custom:stellantis-vehicle-card
+type: custom:stellantis-custom-vehicle-card
 title: Peugeot 3008e
 eyebrow: MY PEUGEOT
 subtitle: Electric · Garage · Connected vehicle
@@ -80,7 +80,7 @@ entities:
 ### Compact card
 
 ```yaml
-type: custom:stellantis-vehicle-compact-card
+type: custom:stellantis-custom-vehicle-compact-card
 title: Peugeot 3008e
 hide_fuel: true
 pills_icons_only: true

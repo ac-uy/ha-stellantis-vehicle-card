@@ -1,6 +1,6 @@
 ﻿/*! Stellantis Vehicle Card - bundled (full + compact) - https://github.com/ac-uy/ha-stellantis-vehicle-card */
 (function(){
-const CARD_NAME = 'stellantis-vehicle-card';
+const CARD_NAME = 'stellantis-custom-vehicle-card';
 
 const DEFAULT_ENTITIES = {
   battery: 'sensor.garage_c5_aircross_battery',
@@ -369,7 +369,7 @@ if (!window.customCards.some((card) => card.type === CARD_NAME)) {
 })();
 
 (function(){
-const CARD_NAME = 'stellantis-vehicle-compact-card';
+const CARD_NAME = 'stellantis-custom-vehicle-compact-card';
 
 const DEFAULT_ENTITIES = {
   battery: 'sensor.garage_c5_aircross_battery',
