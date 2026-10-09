@@ -124,11 +124,16 @@ entities:
 
 `battery`, `electricRange`, `fuel`, `fuelRange`, `mileage`, `cabin`, `coolant`, `serviceBattery`,
 `lastTrip`, `lastCharge`, `batteryHealth`, `chargingRate`, `chargingEnd`, `chargeLimit`,
-`costPer100km`, `charging`, `plugged`, `climate`, `engine`, `alarm`, `connected`,
-`climateStart`, `climateStop`, `wake`.
+`chargeLimitEnabled`, `costPer100km`, `charging`, `plugged`, `climate`, `engine`, `alarm`,
+`connected`, `climateStart`, `climateStop`, `wake`.
 
 The `costPer100km` entity is optional — create a simple template sensor
 (`efficiency kWh/100km × charging price €/kWh`) if you want the cost band populated.
+
+The `chargeLimitEnabled` entity (the vehicle's charge-limit switch) is optional. When
+provided, the charging strip only shows the configured charge target (e.g. "to 80%")
+while that switch is on; otherwise it shows "to 100%". Without it, the card falls back
+to showing the raw `chargeLimit` value when positive.
 
 ## Credits
 

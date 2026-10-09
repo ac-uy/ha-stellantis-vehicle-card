@@ -4,6 +4,20 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2026-10-09
+
+### Fixed
+- Charging strip now shows a charge-target percentage only when the vehicle's
+  charge-limit feature is actually enabled. Previously, a car with the limit
+  switch off could report its charge-limit number resting at the slider minimum
+  (e.g. 15%), which the card displayed as a misleading "to 15%". It now falls
+  back to "to 100%" unless the limit is really set.
+
+### Added
+- `chargeLimitEnabled` entity key (the vehicle's charge-limit switch). The
+  charging strip uses it to decide whether to show the configured limit or
+  "to 100%". Defaults to the C5 Aircross limit switch; override per vehicle.
+
 ## [1.0.3] - 2026-10-03
 
 ### Fixed

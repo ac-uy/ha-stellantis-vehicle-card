@@ -17,6 +17,7 @@ const DEFAULT_ENTITIES = {
   chargingRate: 'sensor.garage_c5_aircross_battery_charging_rate',
   chargingEnd: 'sensor.garage_c5_aircross_battery_charging_end',
   chargeLimit: 'number.garage_c5_aircross_battery_charging_limit',
+  chargeLimitEnabled: 'switch.garage_c5_aircross_battery_charging_limit',
   costPer100km: 'sensor.c5_aircross_cost_per_100km',
   charging: 'binary_sensor.garage_c5_aircross_battery_charging',
   plugged: 'binary_sensor.garage_c5_aircross_battery_plugged',
@@ -269,7 +270,8 @@ class C5AircrossCard extends HTMLElement {
         items.push(`<span class="cs-item"><ha-icon icon="mdi:clock-outline"></ha-icon>${etaTxt}</span>`);
       }
     }
-    const limitPct = (limit !== null && limit > 0) ? limit : 100;
+    const limitEnabled = this._raw(e.chargeLimitEnabled) === 'on';
+    const limitPct = (limitEnabled && limit !== null && limit > 0) ? limit : 100;
     items.push(`<span class="cs-item"><ha-icon icon="mdi:battery-charging-90"></ha-icon>to ${this._escape(limitPct.toLocaleString('en-US', { maximumFractionDigits: 0 }))}%</span>`);
     return `<div class="charge-strip">${items.join('')}</div>`;
   }
@@ -381,6 +383,7 @@ const DEFAULT_ENTITIES = {
   chargingRate: 'sensor.garage_c5_aircross_battery_charging_rate',
   chargingEnd: 'sensor.garage_c5_aircross_battery_charging_end',
   chargeLimit: 'number.garage_c5_aircross_battery_charging_limit',
+  chargeLimitEnabled: 'switch.garage_c5_aircross_battery_charging_limit',
   plugged: 'binary_sensor.garage_c5_aircross_battery_plugged',
   climate: 'binary_sensor.garage_c5_aircross_preconditioning',
   alarm: 'binary_sensor.garage_c5_aircross_alarm',
@@ -531,7 +534,8 @@ class C5AircrossCompactCard extends HTMLElement {
         items.push(`<span class="cs-item"><ha-icon icon="mdi:clock-outline"></ha-icon>${etaTxt}</span>`);
       }
     }
-    const limitPct = (limit !== null && limit > 0) ? limit : 100;
+    const limitEnabled = this._raw(e.chargeLimitEnabled) === 'on';
+    const limitPct = (limitEnabled && limit !== null && limit > 0) ? limit : 100;
     items.push(`<span class="cs-item"><ha-icon icon="mdi:battery-charging-90"></ha-icon>to ${this._esc(limitPct.toLocaleString('en-US', { maximumFractionDigits: 0 }))}%</span>`);
     return `<div class="charge-strip">${items.join('')}</div>`;
   }
